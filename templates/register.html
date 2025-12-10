@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Регистрация</h2>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div>{{ form.username.label }}<br>{{ form.username() }}{% for e in form.username.errors %}<div style="color:red">{{ e }}</div>{% endfor %}</div>
+    <div>{{ form.password.label }}<br>{{ form.password() }}{% for e in form.password.errors %}<div style="color:red">{{ e }}</div>{% endfor %}</div>
+    <div>{{ form.password2.label }}<br>{{ form.password2() }}{% for e in form.password2.errors %}<div style="color:red">{{ e }}</div>{% endfor %}</div>
+    <div>{{ form.submit() }}</div>
+  </form>
+{% endblock %}

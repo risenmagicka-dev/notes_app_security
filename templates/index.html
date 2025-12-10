@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section>
+        <h2>Добавить новую заметку</h2>
+        <form method="post" action="{{ url_for('index') }}">
+            {{ form.hidden_tag() }} {# включает CSRF-токен #}
+            <div>
+                {{ form.title.label }}<br>
+                {{ form.title(size=60) }}
+                {% for err in form.title.errors %}
+                    <div style="color:red">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div>
+                {{ form.content.label }}<br>
+                {{ form.content(rows=6, cols=60) }}
+                {% for err in form.content.errors %}
+                <div style="color:red">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div>
+                {{ form.submit() }}
+            </div>
+        </form>
+    </section>
+<hr>
+
+<section>
+    <h2>Список заметок</h2>
+    {% if notes %}
+        <ul>
+            {% for note in notes %}
+            <li>
+                <h3>{{ note.title }}</h3>
+                <p>Создано: {{ note.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                <!-- Jinja2 экранирует ввод по умолчанию; заменяем переносы строк на <br> и помечаем как safe после экранирования -->
+                <div>{{ note.content | e | replace('\n', '<br>') | safe }}</div>
+
+
+                <p>
+                    <a href="{{ url_for('edit_note', note_id=note.id) }}">Редактировать</a>
+                    <!-- Удаление через POST с CSRF-защитой -->
+                    <form method="post" action="{{ url_for('delete_note', note_id=note.id) }}" style="display:inline">
+                        {{ form.hidden_tag() }} {# используем тот же form для CSRF; это корректно, Flask-WTF будет ожидать токен #}
+                        <button type="submit" onclick="return confirm('Удалить заметку?')">Удалить</button>
+                    </form>
+                </p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Заметок пока нет.</p>
+    {% endif %}
+</section>
+{% endblock %}

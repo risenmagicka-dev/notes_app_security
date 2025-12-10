@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Небезопасный вход (только для тестов)</h2>
+  <form method="post">
+    <div>Логин:<br><input type="text" name="username"></div>
+    <div>Пароль:<br><input type="text" name="password"></div>
+    <div><button type="submit">Войти</button></div>
+  </form>
+{% endblock %}
